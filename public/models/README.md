@@ -1,12 +1,22 @@
-# 3D model placeholders
+# Production 3D assets
 
-Place production GLB assets here using these names:
+Place licensed photorealistic assets here. The runtime is prepared for lazy-loaded GLB/GLTF files with Draco meshes and KTX2 texture payloads, without requiring future refactors.
 
-- `female.glb` — realistic female avatar with separate head/body meshes.
-- `hair1.glb` — Long straight hair mesh.
-- `hair2.glb` — Curly hair mesh.
-- `hair3.glb` — Wavy hair mesh.
-- `hair4.glb` — Bob cut hair mesh.
-- `hair5.glb` — Ponytail hair mesh.
+Recommended structure:
 
-The runtime currently includes procedural fallback meshes so the scene works before licensed cinematic assets are added.
+```txt
+public/models/avatar/female-realistic.draco.glb
+public/models/hair/long-straight.ultra.glb
+public/models/hair/long-straight.high.glb
+public/models/hair/long-straight.medium.glb
+public/models/hair/long-straight.low.glb
+public/models/hair/{curly,wavy,bob,ponytail,layered,wolf,butterfly}.{ultra,high,medium,low}.glb
+public/textures/hair/*.ktx2
+```
+
+Optimization pipeline before deploy:
+
+1. Export separate LOD meshes per hairstyle.
+2. Run `gltf-transform optimize input.glb output.glb --compress draco --texture-compress ktx2`.
+3. Keep draw calls low by merging static hair cards and using shared PBR material slots.
+4. Use normal, roughness, AO and anisotropy maps for premium hair response.
