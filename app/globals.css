@@ -20,7 +20,7 @@ body {
     radial-gradient(circle at 25% 10%, rgba(255, 255, 255, 0.95), transparent 28rem),
     linear-gradient(135deg, #f8f4ef 0%, #ebe7e2 45%, #d9d3ce 100%);
   color: var(--foreground);
-  font-family: var(--font-geist-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans, Arial), Helvetica, sans-serif;
 }
 
 button,

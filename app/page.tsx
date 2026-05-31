@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { AvatarScene } from "@/components/AvatarScene";
 import { ColorPicker } from "@/components/ColorPicker";
 import { HairSelector } from "@/components/HairSelector";
+import { PerformanceMonitor } from "@/components/ui/PerformanceMonitor";
 
 export default function Home() {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -45,10 +46,11 @@ export default function Home() {
               WebGL real-time 360°
             </div>
             <AvatarScene onCanvasReady={(canvas) => (canvasRef.current = canvas)} />
+            <PerformanceMonitor />
             <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-stone-950/18 to-transparent p-6 text-white">
               <p className="max-w-xl text-sm text-white/82">
                 Arraste para rotacionar, faça pinch/scroll para zoom e use os controles laterais para trocar mesh, cor,
-                brilho e iluminação sem recarregar a cena.
+                brilho, LOD, qualidade gráfica e iluminação sem recarregar a cena.
               </p>
             </div>
           </section>
