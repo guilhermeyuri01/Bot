@@ -1,27 +1,26 @@
 import type { Metadata } from "next";
-import type { ReactNode } from "react";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Borogodó Bar & Restaurante | Gastronomia Brasileira em Porto Ferreira",
+  title: "Borogodó Bar & Restaurante | Porto Ferreira, SP",
   description:
-    "Restaurante em Porto Ferreira com música ao vivo, gastronomia brasileira, drinks especiais, arte, murais e experiências autênticas.",
+    "Borogodó Bar & Restaurante em Porto Ferreira: gastronomia brasileira, bar com música ao vivo, drinks artesanais e ambiente artístico sofisticado.",
   keywords: [
-    "Restaurante em Porto Ferreira",
-    "Melhor bar Porto Ferreira",
-    "Música ao vivo Porto Ferreira",
-    "Gastronomia brasileira Porto Ferreira",
+    "restaurante Porto Ferreira",
+    "bar Porto Ferreira",
+    "música ao vivo Porto Ferreira",
+    "gastronomia brasileira Porto Ferreira",
     "Borogodó Bar e Restaurante",
   ],
   openGraph: {
     title: "Borogodó Bar & Restaurante",
-    description: "Arte, sabor e tradição brasileira em um só lugar, no coração de Porto Ferreira.",
+    description: "Restaurante brasileiro premium em Porto Ferreira com música ao vivo, murais artísticos e drinks artesanais.",
     locale: "pt_BR",
     type: "website",
   },
 };
 
-export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pt-BR">
       <body>{children}</body>
