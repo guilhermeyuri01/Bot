@@ -1,102 +1,39 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { motion } from "@/lib/animation/framer-motion";
 
-const whatsappLink = "https://wa.me/5519999999999?text=Ol%C3%A1%2C%20quero%20fazer%20um%20pedido%20no%20Mikan%20Sushi";
+const featureImage =
+  "https://images.unsplash.com/photo-1541807084-5c52b6b3adef?auto=format&fit=crop&w=1800&q=92";
+const parallaxImage =
+  "https://images.unsplash.com/photo-1519608487953-e999c86e7455?auto=format&fit=crop&w=2400&q=92";
 
-const heroImage =
-  "https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?auto=format&fit=crop&w=2400&q=90";
-
-const aboutImage =
-  "https://images.unsplash.com/photo-1617196034796-73dfa7b1fd56?auto=format&fit=crop&w=1600&q=90";
-
-const highlights = [
+const pillars = [
   {
-    icon: "🍣",
-    title: "Sushi Premium",
-    text: "Cortes frios, arroz no ponto e finalização precisa para peças que chegam à mesa com brilho e frescor.",
+    title: "Silêncio visual",
+    text: "Interface reduzida ao essencial para que cada detalhe respire.",
+    icon: "M12 3.5v17M3.5 12h17",
   },
   {
-    icon: "🌯",
-    title: "Temaki Artesanal",
-    text: "Cones montados na hora, alga crocante e recheios generosos com assinatura japonesa contemporânea.",
+    title: "Movimento preciso",
+    text: "Transições lentas, suaves e intencionais, sem distrações.",
+    icon: "M4 16.5C7 8 13 8 20 4.5M4 19.5C10 15 14 15 20 12",
   },
   {
-    icon: "🥗",
-    title: "Poke Bowl",
-    text: "Bowls leves, intensos e coloridos, combinando peixe, grãos, molhos e texturas em equilíbrio.",
+    title: "Presença premium",
+    text: "Contraste profundo, tipografia ampla e um azul que guia a ação.",
+    icon: "M12 4.75 14.3 9.4 19.4 10.15 15.7 13.75 16.55 18.8 12 16.45 7.45 18.8 8.3 13.75 4.6 10.15 9.7 9.4 12 4.75Z",
   },
-];
-
-const menuItems = [
-  {
-    title: "À la Carte",
-    kicker: "Nigiri · Sashimi · Uramaki",
-    image: "https://images.unsplash.com/photo-1611143669185-af224c5e3252?auto=format&fit=crop&w=1600&q=90",
-    text: "Peças autorais e clássicas preparadas em pequenos lotes para preservar temperatura, textura e delicadeza.",
-  },
-  {
-    title: "Combinados",
-    kicker: "Seleções para compartilhar",
-    image: "https://images.unsplash.com/photo-1553621042-f6e147245754?auto=format&fit=crop&w=1600&q=90",
-    text: "Sequências elegantes para duas ou mais pessoas, com variedade de peixe, contraste de molhos e apresentação minimalista.",
-  },
-  {
-    title: "Temaki",
-    kicker: "Salmão · Atum · Skin · Hot",
-    image: "https://images.unsplash.com/photo-1562158074-d49fbeffcc91?auto=format&fit=crop&w=1600&q=90",
-    text: "Montagem rápida, alga seca e recheios intensos para quem quer sabor japonês sem perder praticidade.",
-  },
-];
-
-const reviews = [
-  {
-    name: "Camila R.",
-    quote: "O peixe veio impecável, o ambiente é escuro e elegante, e o combinado parecia obra de arte.",
-  },
-  {
-    name: "Lucas M.",
-    quote: "Melhor japonês de Porto Ferreira. Temaki crocante, atendimento rápido e delivery chegou perfeito.",
-  },
-  {
-    name: "Fernanda S.",
-    quote: "Experiência premium de verdade: luz baixa, sushi fresco e apresentação muito acima da média.",
-  },
-  {
-    name: "Rafael T.",
-    quote: "Poke muito bem montado, peças delicadas e sabor equilibrado. Virei cliente do Mikan.",
-  },
-  {
-    name: "Juliana P.",
-    quote: "Preço justo pela qualidade. O combinado premium é lindo e dá vontade de pedir tudo de novo.",
-  },
-];
-
-const navLinks = [
-  { label: "Menu", href: "#menu" },
-  { label: "Sobre", href: "#sobre" },
-  { label: "Delivery", href: "#delivery" },
-  { label: "Contato", href: "#contato" },
 ];
 
 export default function Home() {
-  const [scrolled, setScrolled] = useState(false);
-  const heroRef = useRef<HTMLElement | null>(null);
-  const reviewsRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 42);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  const pageRef = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     let ctx: { revert: () => void } | undefined;
 
-    async function loadMotion() {
+    async function initScrollExperience() {
       const [{ default: gsap }, { ScrollTrigger }] = await Promise.all([
         import("@/lib/animation/gsap"),
         import("@/lib/animation/ScrollTrigger"),
@@ -104,220 +41,165 @@ export default function Home() {
 
       gsap.registerPlugin(ScrollTrigger);
       ctx = gsap.context(() => {
-        gsap.utils.toArray<HTMLElement>("[data-reveal]").forEach((element) => {
+        gsap.utils.toArray<HTMLElement>("[data-fade-up]").forEach((element) => {
           gsap.fromTo(
             element,
-            { autoAlpha: 0, y: 54 },
+            { autoAlpha: 0, y: 64 },
             {
               autoAlpha: 1,
               y: 0,
-              duration: 1.15,
+              duration: 1.4,
               ease: "power3.out",
               scrollTrigger: { trigger: element, start: "top 82%", once: true },
             },
           );
         });
 
-        gsap.to(".hero-image", {
-          yPercent: 10,
-          ease: "none",
-          scrollTrigger: { trigger: heroRef.current, start: "top top", end: "bottom top", scrub: 1.2 },
+        gsap.utils.toArray<HTMLElement>("[data-fade-left]").forEach((element) => {
+          gsap.fromTo(
+            element,
+            { autoAlpha: 0, x: -72 },
+            {
+              autoAlpha: 1,
+              x: 0,
+              duration: 1.45,
+              ease: "power3.out",
+              scrollTrigger: { trigger: element, start: "top 76%", once: true },
+            },
+          );
         });
-      });
+
+        gsap.utils.toArray<HTMLElement>("[data-fade-right]").forEach((element) => {
+          gsap.fromTo(
+            element,
+            { autoAlpha: 0, x: 72 },
+            {
+              autoAlpha: 1,
+              x: 0,
+              duration: 1.45,
+              ease: "power3.out",
+              scrollTrigger: { trigger: element, start: "top 76%", once: true },
+            },
+          );
+        });
+
+        gsap.utils.toArray<HTMLElement>("[data-scale-image]").forEach((element) => {
+          gsap.fromTo(
+            element,
+            { scale: 1.08 },
+            {
+              scale: 1,
+              duration: 1.6,
+              ease: "power2.out",
+              scrollTrigger: { trigger: element, start: "top 88%", once: true },
+            },
+          );
+        });
+
+        gsap.to("[data-parallax-image]", {
+          yPercent: -10,
+          scale: 1.06,
+          ease: "none",
+          scrollTrigger: {
+            trigger: "[data-parallax-section]",
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1.5,
+          },
+        });
+      }, pageRef);
     }
 
-    loadMotion();
+    initScrollExperience();
     return () => ctx?.revert();
   }, []);
 
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      const track = reviewsRef.current;
-      if (!track) return;
-
-      const maxScroll = track.scrollWidth - track.clientWidth;
-      if (track.scrollLeft >= maxScroll - 20) {
-        track.scrollTo({ left: 0, behavior: "smooth" });
-      } else {
-        track.scrollBy({ left: 380, behavior: "smooth" });
-      }
-    }, 3300);
-
-    return () => window.clearInterval(timer);
-  }, []);
-
   return (
-    <main>
-      <header className={`navbar ${scrolled ? "is-solid" : ""}`}>
-        <a className="logo" href="#top" aria-label="Mikan Sushi início">
-          <span>MIKAN</span> <strong>SUSHI</strong>
-        </a>
-        <nav aria-label="Navegação principal">
-          {navLinks.map((link) => (
-            <a key={link.href} href={link.href}>
-              {link.label}
-            </a>
-          ))}
-        </nav>
-      </header>
-
-      <section id="top" className="hero" ref={heroRef}>
-        <div className="hero-image">
-          <Image src={heroImage} alt="Sushi premium em restaurante japonês escuro" fill priority sizes="100vw" />
-        </div>
-        <div className="hero-overlay" />
+    <main ref={pageRef} className="site-shell">
+      <section className="hero-section" id="top" data-pin>
         <motion.div
-          className="hero-content"
-          initial={{ opacity: 0, y: 28 }}
+          className="hero-copy"
+          initial={{ opacity: 0, y: 36 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1.1 }}
+          transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
         >
-          <p className="eyebrow">Porto Ferreira · SP</p>
-          <h1>MIKAN SUSHI</h1>
-          <p className="hero-subtitle">Gastronomia japonesa em Porto Ferreira.</p>
-          <p className="rating-line">⭐ 4.8 no Google · 135 avaliações</p>
-          <div className="hero-actions">
-            <a className="button button-red" href="#menu">
-              Ver Cardápio
-            </a>
-            <a className="button button-outline" href={whatsappLink} target="_blank" rel="noreferrer">
-              Fazer Pedido
-            </a>
-          </div>
+          <p className="eyebrow">Showcase 01</p>
+          <h1>Experiência. Redefinida.</h1>
+          <p className="hero-subtitle">Design que você sente antes de entender.</p>
         </motion.div>
+        <a className="scroll-indicator" href="#feature" aria-label="Rolar para a próxima seção">
+          <span />
+        </a>
       </section>
 
-      <section className="section highlights-section" aria-label="Destaques do Mikan Sushi">
-        <div className="highlights-grid">
-          {highlights.map((item) => (
-            <article className="highlight-card" key={item.title} data-reveal>
-              <span>{item.icon}</span>
-              <h2>{item.title}</h2>
-              <p>{item.text}</p>
+      <section className="feature-section cinematic-section" id="feature" data-pin>
+        <figure className="feature-media" data-fade-left>
+          <Image
+            src={featureImage}
+            alt="Produto premium em ambiente minimalista escuro"
+            fill
+            sizes="(max-width: 900px) 100vw, 50vw"
+            priority
+            data-scale-image
+          />
+        </figure>
+        <div className="feature-copy" data-fade-right>
+          <p className="eyebrow accent">Precisão absoluta</p>
+          <h2>Uma presença que ocupa o espaço sem pedir atenção.</h2>
+          <p>
+            Superfícies profundas, reflexos controlados e hierarquia tipográfica clara constroem uma narrativa premium,
+            lenta e memorável.
+          </p>
+        </div>
+      </section>
+
+      <section className="image-section" aria-label="Imagem cinematográfica em largura total" data-parallax-section>
+        <div className="parallax-frame">
+          <Image
+            src={parallaxImage}
+            alt="Luz azul atravessando um cenário preto minimalista"
+            fill
+            sizes="100vw"
+            data-parallax-image
+          />
+        </div>
+        <div className="image-caption" data-fade-up>
+          <p className="eyebrow accent">Cinemático</p>
+          <h2>Escuro por escolha. Luminoso por detalhe.</h2>
+        </div>
+      </section>
+
+      <section className="pillars-section cinematic-section" data-pin>
+        <div className="section-heading" data-fade-up>
+          <p className="eyebrow">Essencial</p>
+          <h2>Três princípios. Nenhum ruído.</h2>
+        </div>
+        <div className="pillars-grid">
+          {pillars.map((pillar, index) => (
+            <article className="pillar-card" data-fade-up key={pillar.title} style={{ transitionDelay: `${index * 120}ms` }}>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d={pillar.icon} />
+              </svg>
+              <h3>{pillar.title}</h3>
+              <p>{pillar.text}</p>
             </article>
           ))}
         </div>
       </section>
 
-      <section id="sobre" className="section about-section">
-        <div className="about-grid">
-          <div data-reveal>
-            <p className="eyebrow">Sobre</p>
-            <h2>Sabor japonês com alma brasileira</h2>
-            <div className="red-divider" />
-            <p>
-              O Mikan Sushi combina técnica japonesa, ingredientes frescos e um ritmo acolhedor de interior.
-              A casa foi desenhada para noites de luz baixa, pedidos compartilhados e delivery que mantém a
-              experiência premium até a sua mesa.
-            </p>
-            <p className="price-note">Ticket médio: R$120-140 por pessoa</p>
-          </div>
-          <figure className="about-image" data-reveal>
-            <Image src={aboutImage} alt="Chef preparando sushi em ambiente escuro" fill sizes="(max-width: 860px) 100vw, 50vw" />
-          </figure>
-        </div>
+      <section className="quote-section cinematic-section" data-pin>
+        <blockquote data-fade-up>
+          “Quando tudo é removido, o que permanece precisa ser inesquecível.”
+        </blockquote>
       </section>
 
-      <section id="menu" className="section menu-section">
-        <div className="section-heading" data-reveal>
-          <p className="eyebrow">Cardápio</p>
-          <h2>O peixe é o protagonista.</h2>
-        </div>
-        <div className="menu-list">
-          {menuItems.map((item, index) => (
-            <article className={`menu-row ${index % 2 ? "is-reverse" : ""}`} key={item.title} data-reveal>
-              <figure className="menu-image">
-                <Image src={item.image} alt={`${item.title} do Mikan Sushi`} fill sizes="(max-width: 860px) 100vw, 56vw" />
-              </figure>
-              <div className="menu-copy">
-                <p>{item.kicker}</p>
-                <h3>{item.title}</h3>
-                <span>{item.text}</span>
-              </div>
-            </article>
-          ))}
+      <section className="cta-section cinematic-section" id="contato">
+        <div data-fade-up>
+          <p className="eyebrow accent">Comece agora</p>
+          <h2>Crie uma experiência que parece inevitável.</h2>
+          <a className="cta-button" href="mailto:hello@example.com">Solicitar showcase</a>
         </div>
       </section>
-
-      <section className="section reviews-section" aria-label="Avaliações do Mikan Sushi">
-        <div className="reviews-heading" data-reveal>
-          <strong>4.8</strong>
-          <span>★★★★★</span>
-          <p>135 avaliações no Google</p>
-        </div>
-        <div className="reviews-track" ref={reviewsRef}>
-          {[...reviews, ...reviews].map((review, index) => (
-            <article className="review-card" key={`${review.name}-${index}`}>
-              <p>“{review.quote}”</p>
-              <span>{review.name}</span>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section id="delivery" className="section delivery-section">
-        <div className="delivery-panel" data-reveal>
-          <p className="eyebrow">Delivery</p>
-          <h2>Japonês premium no seu tempo.</h2>
-          <div className="delivery-metrics">
-            <div>
-              <strong>55-65 min</strong>
-              <span>Entrega estimada</span>
-            </div>
-            <div>
-              <strong>30 min</strong>
-              <span>Retirada na casa</span>
-            </div>
-          </div>
-          <a className="button button-red" href={whatsappLink} target="_blank" rel="noreferrer">
-            Pedir pelo WhatsApp
-          </a>
-        </div>
-      </section>
-
-      <section id="contato" className="location-section">
-        <div className="location-grid section">
-          <div className="location-copy" data-reveal>
-            <p className="eyebrow">Localização</p>
-            <h2>Av. Eng. Nicolau De V. Forjaz, 1351</h2>
-            <dl>
-              <div>
-                <dt>Endereço</dt>
-                <dd>Porto Ferreira, SP</dd>
-              </div>
-              <div>
-                <dt>Horários</dt>
-                <dd>Terça a domingo · 18h às 23h</dd>
-              </div>
-              <div>
-                <dt>Especialidades</dt>
-                <dd>Sushi, temaki, poke, combinados e delivery japonês</dd>
-              </div>
-            </dl>
-            <div className="inline-actions">
-              <a className="button button-red" href={whatsappLink} target="_blank" rel="noreferrer">
-                WhatsApp
-              </a>
-              <a className="button button-outline" href={whatsappLink} target="_blank" rel="noreferrer">
-                Delivery
-              </a>
-            </div>
-          </div>
-          <div className="map-frame" data-reveal>
-            <iframe
-              title="Mapa do Mikan Sushi em Porto Ferreira"
-              loading="lazy"
-              src="https://www.google.com/maps?q=Av.%20Eng.%20Nicolau%20De%20V.%20Forjaz%2C%201351%2C%20Porto%20Ferreira%2C%20SP&output=embed"
-            />
-          </div>
-        </div>
-      </section>
-
-      <footer className="footer">
-        <div />
-        <strong><span>MIKAN</span> SUSHI</strong>
-        <p>Instagram · WhatsApp · Av. Eng. Nicolau De V. Forjaz, 1351, Porto Ferreira, SP</p>
-      </footer>
     </main>
   );
 }
